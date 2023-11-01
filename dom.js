@@ -73,11 +73,84 @@
 
 // ===============Query selector All ==============
 
-var odd=document.querySelectorAll('li:nth-child(odd)')
-var even=document.querySelectorAll('li:nth-child(even)')
+// var odd=document.querySelectorAll('li:nth-child(odd)')
+// var even=document.querySelectorAll('li:nth-child(even)')
 
-for(let i=0;i<odd.length;i++){
-    odd[i].style.backgroundColor="yellow"
-    even[i].style.backgroundColor="invisible"
+// for(let i=0;i<odd.length;i++){
+//     odd[i].style.backgroundColor="yellow"
+//     even[i].style.backgroundColor="invisible"
 
-}
+// }
+
+
+// ============= Traversing node ==================
+
+var itemList=document.querySelector("#items")
+//================= parentNode==========================
+// console.log(itemList.parentNode)
+
+// itemList.parentNode.style.backgroundColor="red"
+// itemList.parentNode.parentNode.style.backgroundColor="blue"
+// itemList.parentNode.parentNode.parentNode.style.backgroundColor="yellow"
+
+// ==============child nodes===================
+
+// console.log(itemList.childNodes)
+// console.log(itemList.children)
+// console.log(itemList.children[0])
+
+// itemList.children[0].style.backgroundColor="yellow"
+// itemList.children[2].style.backgroundColor="blue"
+
+
+// firstchild
+
+// console.log(itemList.firstChild)
+// console.log(itemList.firstChildren)
+
+// first element child
+// console.log(itemList.firstElementChild.textContent)
+// itemList.firstElementChild.textContent="same"
+
+
+// last child
+// console.log(itemList.lastChild)
+// itemList.lastElementChild.textContent="same4"
+
+
+// next siblings
+// console.log("next",itemList.nextSibling)
+
+// console.log("next",itemList.nextElementSibling)
+
+// PREVIOUS SIBMLING
+
+// console.log(itemList.previousSibling)
+// console.log(itemList.previousElementSibling)
+
+// creating dom elements
+
+var newDiv=document.createElement("div")
+// add-class
+newDiv.className="hellooo"
+
+// add-id
+newDiv.id="hello1"
+
+// add attr
+newDiv.setAttribute('title','Hello Div')
+
+// create text node
+var newDivText=document.createTextNode("Hello World")
+
+newDiv.appendChild(newDivText)
+
+// 
+
+var container=document.querySelector('header .container')
+var h1=document.querySelector('header h1')
+
+console.log(newDiv)
+newDiv.style.fontSize="30px"
+
+container.insertBefore(newDiv,h1)
