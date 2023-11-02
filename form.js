@@ -18,8 +18,13 @@ const li=document.createElement('li')
 li.appendChild(document.createTextNode(`${nameInput.value}:${emailInput.value}`))
 
 userList.appendChild(li)
-localStorage.setItem("name",nameInput.value)
-localStorage.setItem("email",emailInput.value)
+const userData = {
+  name: nameInput.value,
+  email: emailInput.value
+};
+
+// Store the user data object as a JSON string in local storage
+localStorage.setItem('userData', JSON.stringify(userData));
 
 nameInput.value=''
 emailInput.value=''
