@@ -17,13 +17,22 @@ setTimeout(()=>msj.remove(),1000)
 const li=document.createElement('li')
 li.appendChild(document.createTextNode(`${nameInput.value}:${emailInput.value}`))
 
-userList.appendChild(li)
-const userData = {
+const userDataJSON = localStorage.getItem('userData');
+
+// Parse the JSON string back into a JavaScript object
+const userData = JSON.parse(userDataJSON) || {}; // Initialize an empty object if there's no existing data
+
+// Create a new user object
+const newUser = {
   name: nameInput.value,
   email: emailInput.value
 };
 
-// Store the user data object as a JSON string in local storage
+// Append the new user data to the existing object
+const newUserId = Object.keys(userData).length + 1;
+userData[newUserId] = newUser;
+
+// Store the updated object as a JSON string in local storage
 localStorage.setItem('userData', JSON.stringify(userData));
 
 nameInput.value=''
