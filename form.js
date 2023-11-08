@@ -3,6 +3,7 @@ const nameInput = document.querySelector('#name');
 const emailInput = document.querySelector('#email');
 const msj = document.querySelector('.msj');
 const userList = document.querySelector('#users');
+let userData = []; // Array to store user data
 
 myForm.addEventListener('submit', onSubmit);
 
@@ -45,6 +46,16 @@ function onSubmit(e) {
   }
 }
 
+function deleteUser(userId) {
+  axios.delete(`https://crudcrud.com/api/35408b6387144f4e9d14845fac46ebe6/appointmentData/${userId}`)
+    .then(response => {
+      // Handle the successful deletion response (if needed)
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
 function renderUserList() {
   // Clear the existing user list
   userList.innerHTML = '';
@@ -77,9 +88,11 @@ function renderUserList() {
 
     // Add an event listener to delete the data when the delete button is clicked
     deleteButton.addEventListener('click', () => {
-      userData.splice(index, 1);
+      // Delete the user data by sending a DELETE request
+      deleteUser(userDataItem._id);
 
-      // Update the data on the CRUD CRUD API by sending a DELETE request
+      // Remove the user from the array
+      userData.splice(index, 1);
 
       // Render the updated user list
       renderUserList();
