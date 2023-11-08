@@ -30,19 +30,46 @@ function onSubmit(e) {
       email: emailInput.value,
     };
 
-    // Add the new data to the array
-    userData.push(userDataItem);
-
-    // Send a POST request to the CRUD CRUD API to add the new data
-    axios.post("https://crudcrud.com/api/35408b6387144f4e9d14845fac46ebe6/appointmentData", userDataItem)
-      .then(response => {
-        nameInput.value = '';
-        emailInput.value = '';
-        renderUserList();
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    if (userData.length === 0) {
+      // If no users exist, add a new user
+      userData.push(userDataItem);
+      axios
+        .post(
+          "https://crudcrud.com/api/35408b6387144f4e9d14845fac46ebe6/appointmentData",
+          userDataItem
+        )
+        .then(response => {
+          nameInput.value = '';
+          emailInput.value = '';
+          renderUserList();
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    } else {
+      // Check if there is an "Edit" button (indicating an existing user) and update the user
+      if (document.querySelector('#updateButton')) {
+        // Remove the "Update" button after updating the user
+        document.querySelector('#updateButton').remove();
+        renderUserList(); // Render the user list
+      } else {
+        // Add the new data to the array if it's a new user
+        userData.push(userDataItem);
+        axios
+          .post(
+            "https://crudcrud.com/api/35408b6387144f4e9d14845fac46ebe6/appointmentData",
+            userDataItem
+          )
+          .then(response => {
+            nameInput.value = '';
+            emailInput.value = '';
+            renderUserList();
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      }
+    }
   }
 }
 
@@ -56,44 +83,55 @@ function deleteUser(userId) {
     });
 }
 
+function updateUser(userId, userDataItem) {
+    axios.put(`https://crudcrud.com/api/35408b6387144f4e9d14845fac46ebe6/appointmentData/${userId}`, userDataItem)
+      .then(response => {
+        // Handle the successful update response (if needed)
+        console.log("User updated successfully", response);
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+  
+
 function renderUserList() {
   // Clear the existing user list
   userList.innerHTML = '';
 
-  // Render each user item with delete and edit buttons
+  // Render each user item with edit and delete buttons
   userData.forEach((userDataItem, index) => {
     const li = document.createElement('li');
     li.appendChild(document.createTextNode(`${userDataItem.name}: ${userDataItem.email}`));
 
     const editButton = document.createElement('button');
     editButton.innerHTML = 'Edit';
+    editButton.addEventListener('click', () => {
+      // Populate the registration form with the user's details for editing
+      nameInput.value = userDataItem.name;
+      emailInput.value = userDataItem.email;
+      // Add an "Update" button for submitting changes
+      myForm.innerHTML += '<button id="updateButton">Update</button>';
+      // Add an event listener for the "Update" button
+      const updateButton = document.querySelector('#updateButton');
+      updateButton.addEventListener('click', () => {
+        // Update the user details in the array
+        userData[index].name = nameInput.value;
+        userData[index].email = emailInput.value;
+        // Send a PUT request to update the user details on the API
+        updateUser(userDataItem._id, userData[index]);
+        // Render the updated user list
+        renderUserList();
+      });
+    });
 
     const deleteButton = document.createElement('button');
     deleteButton.innerHTML = 'Delete';
-
-    // Add an event listener to edit the data when the edit button is clicked
-    editButton.addEventListener('click', () => {
-      // Set the input fields with the existing user data for editing
-      nameInput.value = userDataItem.name;
-      emailInput.value = userDataItem.email;
-
-      // Remove the user data from the array
-      userData.splice(index, 1);
-
-      // Update the data on the CRUD CRUD API by sending a PUT or PATCH request
-
-      // Render the updated user list
-      renderUserList();
-    });
-
-    // Add an event listener to delete the data when the delete button is clicked
     deleteButton.addEventListener('click', () => {
       // Delete the user data by sending a DELETE request
       deleteUser(userDataItem._id);
-
       // Remove the user from the array
       userData.splice(index, 1);
-
       // Render the updated user list
       renderUserList();
     });
